@@ -1,0 +1,9 @@
+[submodule "zero"]
+	path = zero
+	url = https://github.com/Hackerl/zero
+[submodule "shellcode/c-runtime"]
+	path = shellcode/c-runtime
+	url = https://github.com/Hackerl/c-runtime
+[submodule "cmake"]
+	path = cmake
+	url = https://github.com/Hackerl/cmake-3rd
