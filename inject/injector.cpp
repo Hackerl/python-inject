@@ -76,7 +76,17 @@ int CInjector::inject(const std::string &script, bool file) {
         return -1;
     }
 
+    if (!result) {
+        LOG_INFO("allocate memory failed");
+        return -1;
+    }
+
     LOG_INFO("memory allocated: %p", result);
+
+    if (!executor->getRegisters(payload.regs)) {
+        LOG_ERROR("get registers failed");
+        return -1;
+    }
 
     if (!executor->writeMemory(result, &payload, sizeof(payload))) {
         LOG_ERROR("write loader payload failed");

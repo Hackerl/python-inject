@@ -6,6 +6,7 @@
 
 void main(void *ptr) {
     loader_payload_t *payload = (loader_payload_t *)ptr;
+    snapshot(&payload->regs);
 
     if (!payload->file) {
         LOG("eval: %s", payload->script);
@@ -14,11 +15,11 @@ void main(void *ptr) {
 
         if (payload->eval(payload->script) != 0) {
             payload->release(state);
-            z_exit(-1);
+            quit(-1);
         }
 
         payload->release(state);
-        z_exit(0);
+        quit(0);
     }
 
     LOG("eval script: %s", payload->script);
@@ -27,32 +28,32 @@ void main(void *ptr) {
 
     if (fd < 0) {
         LOG("open script failed: %s", payload->script);
-        z_exit(-1);
+        quit(-1);
     }
 
     long fs = Z_RESULT_V(z_lseek(fd, 0, SEEK_END));
 
     if (fs < 0) {
         z_close(fd);
-        z_exit(-1);
+        quit(-1);
     }
 
     if (Z_RESULT_V(z_lseek(fd, 0, SEEK_SET)) < 0) {
         z_close(fd);
-        z_exit(-1);
+        quit(-1);
     }
 
     char *buffer = z_calloc(fs + 1, 1);
 
     if (!buffer) {
         z_close(fd);
-        z_exit(-1);
+        quit(-1);
     }
 
     if (Z_RESULT_V(z_read(fd, buffer, fs)) != fs) {
         z_free(buffer);
         z_close(fd);
-        z_exit(-1);
+        quit(-1);
     }
 
     z_close(fd);
@@ -62,13 +63,13 @@ void main(void *ptr) {
     if (payload->eval(buffer) != 0) {
         payload->release(state);
         z_free(buffer);
-        z_exit(-1);
+        quit(-1);
     }
 
     payload->release(state);
 
     z_free(buffer);
-    z_exit(0);
+    quit(0);
 }
 
 #if __i386__ || __x86_64__
