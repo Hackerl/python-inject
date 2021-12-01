@@ -10,7 +10,15 @@ option(STATIC_BUILD "enable static build" OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-include(cmake/ELFIO.cmake)
+include(FetchContent)
+
+FetchContent_Declare(
+        ELFIO
+        GIT_REPOSITORY    https://github.com/serge1/ELFIO
+        GIT_TAG           Release_3.8
+)
+
+FetchContent_MakeAvailable(ELFIO)
 
 add_subdirectory(zero)
 
