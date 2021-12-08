@@ -1,10 +1,13 @@
 #include "quit.h"
 #include <z_std.h>
 #include <z_syscall.h>
-#include <asm/prctl.h>
 
-#define PRIVATE_SYSCALL -1
-#define PRIVATE_MAGIC 0x70616e676f6c696e
+#if __i386__ || __x86_64__
+#include <asm/prctl.h>
+#endif
+
+#define PRIVATE_EXIT_SYSCALL -1
+#define PRIVATE_EXIT_MAGIC 0x6861636b
 
 static regs_t regs_snapshot = {};
 
@@ -13,7 +16,7 @@ void snapshot(regs_t *regs) {
 }
 
 void quit(int status) {
-    z_syscall(PRIVATE_SYSCALL, status, PRIVATE_MAGIC);
+    z_syscall(PRIVATE_EXIT_SYSCALL, 0, PRIVATE_EXIT_MAGIC, status);
 
 #ifdef __x86_64__
     if (Z_RESULT_V(z_arch_prctl(ARCH_SET_FS, regs_snapshot.fs_base)) < 0)
