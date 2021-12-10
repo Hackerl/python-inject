@@ -11,7 +11,7 @@ typedef void (*PyGILState_Release)(int state);
 typedef struct {
     bool file;
     char script[1024];
-    regs_t regs;
+    context_t context;
     PyRun_SimpleString eval;
     PyGILState_Ensure ensure;
     PyGILState_Release release;

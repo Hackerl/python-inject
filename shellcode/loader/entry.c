@@ -6,7 +6,7 @@
 
 void main(void *ptr) {
     loader_payload_t *payload = (loader_payload_t *)ptr;
-    snapshot(&payload->regs);
+    snapshot(&payload->context);
 
     if (!payload->file) {
         LOG("eval: %s", payload->script);
