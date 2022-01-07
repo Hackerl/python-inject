@@ -20,7 +20,13 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(ELFIO)
 
-add_subdirectory(zero)
+FetchContent_Declare(
+        zero
+        GIT_REPOSITORY https://github.com/Hackerl/zero
+        GIT_TAG master
+)
+
+FetchContent_MakeAvailable(zero)
 
 add_executable(python_inject main.cpp ptrace/tracee.cpp ptrace/executor.cpp inject/injector.cpp)
 target_link_libraries(python_inject zero elfio $<$<BOOL:${STATIC_BUILD}>:-static-pie>)

@@ -47,6 +47,10 @@
 
 Resolve ELF symbol table, find ```PyGILState_Ensure```, ```PyRun_SimpleString``` and ```PyGILState_Release``` function address, then call them in remote process by using ptrace.
 
+### Caveats
+
+The above API are non-reentrant functions, may stop the process forever cause by deadlock.
+
 ### Built With
 
 * [GCC](https://gcc.gnu.org)

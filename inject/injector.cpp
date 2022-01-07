@@ -150,7 +150,7 @@ bool CInjector::getAPIAddress(void **eval, void **ensure, void **release) const 
         return false;
     }
 
-    unsigned long baseAddress = 0;
+    unsigned long base = 0;
 
     if (reader.get_type() != ET_EXEC) {
         std::vector<ELFIO::segment *> loads;
@@ -170,7 +170,7 @@ bool CInjector::getAPIAddress(void **eval, void **ensure, void **release) const 
                     return i->get_virtual_address() < j->get_virtual_address();
                 });
 
-        baseAddress = processMapping.start - ((*minElement)->get_virtual_address() & ~(mPageSize - 1));
+        base = processMapping.start - ((*minElement)->get_virtual_address() & ~(mPageSize - 1));
     }
 
     ELFIO::Elf64_Addr evalAddress = 0;
@@ -193,11 +193,11 @@ bool CInjector::getAPIAddress(void **eval, void **ensure, void **release) const 
         }
 
         if (name == EVAL_SYMBOL) {
-            evalAddress = baseAddress + value;
+            evalAddress = base + value;
         } else if (name == ENSURE_SYMBOL) {
-            ensureAddress = baseAddress + value;
+            ensureAddress = base + value;
         } else if (name == RELEASE_SYMBOL) {
-            releaseAddress = baseAddress + value;
+            releaseAddress = base + value;
         }
     }
 
